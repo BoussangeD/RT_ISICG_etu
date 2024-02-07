@@ -53,15 +53,31 @@ namespace RT_ISICG
 				//p_texture.setPixel( i, j, Vec3f( redColor, greenColor, blueColor ) );
 
 				// Exercice 2
-				float sx = (float)i / ( width - 1 );
-				float sy = (float)j / ( height - 1 );
+				//float sx = (float)(i + 0.5f) / ( width - 1 );	// on fait + 0.5f pour lancer au centre du pixel
+				//float sy = (float)(j + 0.5f) / ( height - 1 );
+				//Ray ray = p_camera->generateRay(sx, sy);
+				//Vec3f colorRay = (ray.getDirection() + 1.0f) * 0.5f;
+				//p_texture.setPixel( i, j, colorRay );
 
-				Ray ray = p_camera->generateRay(sx, sy);
-				Vec3f colorRay = (ray.getDirection() + 1.0f) * 0.5f;
-				p_texture.setPixel( i, j, colorRay );
+				// Exercice 3 - 4
+				//float sx = (float)(i + 0.5f) / ( width - 1 );	// on fait + 0.5f pour lancer au centre du pixel
+				//float sy = (float)(j + 0.5f) / ( height - 1 );
+				//Ray	  ray	   = p_camera->generateRay( sx, sy );
+				//Vec3f colorRay = _integrator->Li( p_scene, ray, 0.0f, 1000.0f );
+				//p_texture.setPixel( i, j, colorRay );
 
-				RayCastIntegrator rci;
-				rci.Li(p_scene, ray, 0, 1000);
+				// Exercice 5
+				Vec3f finalColor = VEC3F_ZERO;
+				for (int k = 0; k < _nbPixelSamples; k++) {
+					// randomFloat du header random.hpp
+					float sx = (float)(i + randomFloat()) / width;
+					float sy = (float)(j + randomFloat()) / height;
+					Ray	  ray	   = p_camera->generateRay( sx, sy );
+					Vec3f colorRay = _integrator->Li( p_scene, ray, 0.0f, 1000.0f );
+					finalColor	   += colorRay;
+				}
+				finalColor /= _nbPixelSamples;
+				p_texture.setPixel( i, j, finalColor );
 			}
 			progressBar.next();
 		}

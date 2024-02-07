@@ -15,8 +15,9 @@ namespace RT_ISICG
 										  const float	p_aspectRatio )
 		: BaseCamera( p_position ), _fovy( p_fovy ), _aspectRatio( p_aspectRatio )
 	{
-		/// TODO ! _u ? _v ? _w ?
-
+		_w = normalize( p_position - p_lookAt );
+		_u = normalize( cross( p_up, _w ) );	// ici, p_up correspond à l'axe y, ceci est indiqué dans le main
+		_v = normalize( cross( _w, _u ) );
 		_updateViewport();
 	}
 

@@ -14,22 +14,31 @@ namespace RT_ISICG
 		float c = glm::dot( rayOriginCenter, rayOriginCenter ) - _radius * _radius;
 
 		float delta = b * b - 4 * a * c;
+
 		if (delta < 0) {
 			return false;
 		}
 
 		else {
-			p_t1 = ( -b - glm::sqrt( delta ) ) / 2.0f;
-			p_t2 = ( -b + glm::sqrt( delta ) ) / 2.0f;
-
-			if ( p_t1 > 0 ) { return true; }
-			else
-			{
-				return p_t2 > 0 ? true : false;
+			if (delta == 0) {
+				p_t1 = -b / ( 2.0f );
 			}
+			else {
+				p_t1 = ( -b - glm::sqrt( delta ) ) / ( 2.0f * a );
+				p_t2 = ( -b + glm::sqrt( delta ) ) / ( 2.0f * a );
+				float p_temp = 0.0f;
+
+				if ( p_t1 > p_t2 ) { 
+					p_temp = p_t1;
+					p_t1   = p_t2;
+					p_t2   = p_temp;
+				}
+			}
+
+			return true;
 		}
 
-		return true;
+		return false;
 	}
 
 } // namespace RT_ISICG

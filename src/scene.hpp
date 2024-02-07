@@ -43,6 +43,9 @@ namespace RT_ISICG
 
 		void _attachMaterialToObject( const std::string & p_materialName, const std::string & p_objectName );
 
+		void _initSceneTP1();
+		void _initSceneTP2();
+
 	  private:
 		ObjectMap	_objectMap;
 		MaterialMap _materialMap;
