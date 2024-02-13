@@ -3,6 +3,7 @@
 #include "objects/sphere.hpp"
 #include "objects/plane.hpp"
 #include "objects/triangle_mesh.hpp"
+#include "lights/point_light.hpp"
 #include <assimp/Importer.hpp>
 #include <assimp/postprocess.h>
 #include <assimp/scene.h>
@@ -51,6 +52,9 @@ namespace RT_ISICG
 		// Link objects and materials.
 		_attachMaterialToObject( "Blue", "Sphere1" );
 		_attachMaterialToObject( "Red", "Plane1" );
+
+		// Add lights
+		_addLight( new PointLight( Vec3f( 1.0f, 10.0f, 1.0f ), WHITE, 100.0f) );
 	} 
 
 	void Scene::init()

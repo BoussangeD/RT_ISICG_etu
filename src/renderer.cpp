@@ -1,5 +1,6 @@
 #include "renderer.hpp"
 #include "integrators/ray_cast_integrator.hpp"
+#include "integrators/direct_lighting_integrator.hpp"
 #include "utils/console_progress_bar.hpp"
 #include "utils/random.hpp"
 
@@ -13,6 +14,7 @@ namespace RT_ISICG
 
 		switch ( p_integratorType )
 		{
+		case IntegratorType::DIRECT_LIGHTING: _integrator = new DirectLightingIntegrator(); break;	// nouvel integrateur
 		case IntegratorType::RAY_CAST:
 		default:
 		{
@@ -77,6 +79,9 @@ namespace RT_ISICG
 					finalColor	   += colorRay;
 				}
 				finalColor /= _nbPixelSamples;
+
+				finalColor = glm::clamp( finalColor, 0.0f, 1.0f ); // restreindre l'intervalle [0;255] sur [0;1]
+
 				p_texture.setPixel( i, j, finalColor );
 			}
 			progressBar.next();

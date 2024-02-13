@@ -9,12 +9,12 @@ namespace RT_ISICG
 	{
 	  public:
 		PointLight( const Vec3f & p_position, const Vec3f & p_color, const float p_power ) : BaseLight( p_color, p_power ), _position( p_position )
-		{
-		}
+		{}
+		virtual ~PointLight() = default;
 
-		inline const Vec3f & getFlatColor() const { return _color; }
+		// inline const Vec3f & getFlatColor() const { return _color; }
 
-		virtual LightSample sample( const Vec3f & p_point ) const = 0;
+		virtual LightSample sample( const Vec3f & p_point ) const;
 
 	  private:
 	    Vec3f _position = VEC3F_ZERO;

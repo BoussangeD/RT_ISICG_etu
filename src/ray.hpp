@@ -21,7 +21,7 @@ namespace RT_ISICG
 		// This function add an offset to the ray origin to avoid self-intersection when e.g. computing shadows
 		inline void offset( const Vec3f p_normal )
 		{
-			/// TODO
+			_origin += p_normal * 0.0001f;	// déplacer "légèrement" le rayon d'ombrage selon la normale
 		}
 
 	  private:

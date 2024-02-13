@@ -1,0 +1,39 @@
+#include "direct_lighting_integrator.hpp"
+
+namespace RT_ISICG
+{
+	Vec3f DirectLightingIntegrator::_directLighting( const HitRecord & p_hitRecord,
+													 const Scene &	   p_scene,
+													 const float	   p_tMin ) const
+	{
+		Vec3f finalColor = VEC3F_ZERO;
+		for ( auto light : p_scene.getLights() ) {
+			LightSample lightSample = light->sample( p_hitRecord._point );
+			Ray			shadowRay( p_hitRecord._point, lightSample._direction );
+			shadowRay.offset( p_hitRecord._normal );	// offset pour débruiter
+
+			bool isInShadow = p_scene.intersectAny( shadowRay, p_tMin, lightSample._distance );
+
+			if ( !isInShadow ) {
+				float cosTheta = glm::max( 0.0f, dot( p_hitRecord._normal, lightSample._direction ) );
+				Vec3f directContribution = p_hitRecord._object->getMaterial()->getFlatColor() * lightSample._radiance * cosTheta;
+
+				finalColor += directContribution;
+			}
+		}
+		return finalColor;
+	}
+
+	Vec3f DirectLightingIntegrator::Li( const Scene & p_scene,
+								 const Ray &   p_ray,
+								 const float   p_tMin,
+								 const float   p_tMax ) const
+	{
+		HitRecord hitRecord;
+		if ( p_scene.intersect( p_ray, p_tMin, p_tMax, hitRecord ) )
+		{ 
+			return _directLighting( hitRecord, p_scene, p_tMin );
+		}
+		else { return _backgroundColor; }
+	}
+} // namespace RT_ISICG
