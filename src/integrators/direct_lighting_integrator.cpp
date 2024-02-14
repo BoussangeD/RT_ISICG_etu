@@ -7,31 +7,55 @@ namespace RT_ISICG
 													 const float	   p_tMin ) const
 	{
 		Vec3f finalColor = VEC3F_ZERO;
-		for ( auto light : p_scene.getLights() ) {
-			LightSample lightSample = light->sample( p_hitRecord._point );
-			Ray			shadowRay( p_hitRecord._point, lightSample._direction );
-			shadowRay.offset( p_hitRecord._normal );	// offset pour débruiter
+		for ( auto light : p_scene.getLights() )
+		{
+			if ( light->getIsSurface() )	// lancer un rayon d'ombrage en cas de source surfacique
+			{
+				for ( int i = 0; i < _nbLightSamples; i++ )
+				{
+					LightSample lightSample = light->sample( p_hitRecord._point );
+					Ray			shadowRay( p_hitRecord._point, lightSample._direction );
+					shadowRay.offset( p_hitRecord._normal ); // offset pour débruiter
 
-			bool isInShadow = p_scene.intersectAny( shadowRay, p_tMin, lightSample._distance );
+					bool isInShadow = p_scene.intersectAny( shadowRay, p_tMin, lightSample._distance );
 
-			if ( !isInShadow ) {
-				float cosTheta = glm::max( 0.0f, dot( p_hitRecord._normal, lightSample._direction ) );
-				Vec3f directContribution = p_hitRecord._object->getMaterial()->getFlatColor() * lightSample._radiance * cosTheta;
+					if ( !isInShadow )
+					{
+						float cosTheta = glm::max( 0.0f, dot( p_hitRecord._normal, lightSample._direction ) );
+						Vec3f directContribution = p_hitRecord._object->getMaterial()->getFlatColor() * lightSample._radiance * cosTheta;
 
-				finalColor += directContribution;
+						finalColor += directContribution;
+					}
+				}
+				finalColor /= _nbLightSamples;
+			}
+			else {
+				LightSample lightSample = light->sample( p_hitRecord._point );
+				Ray			shadowRay( p_hitRecord._point, lightSample._direction );
+				shadowRay.offset( p_hitRecord._normal ); // offset pour débruiter
+
+				bool isInShadow = p_scene.intersectAny( shadowRay, p_tMin, lightSample._distance );
+
+				if ( !isInShadow )
+				{
+					float cosTheta = glm::max( 0.0f, dot( p_hitRecord._normal, lightSample._direction ) );
+					Vec3f directContribution = p_hitRecord._object->getMaterial()->getFlatColor() * lightSample._radiance * cosTheta;
+
+					finalColor += directContribution;
+				}
 			}
 		}
 		return finalColor;
 	}
 
 	Vec3f DirectLightingIntegrator::Li( const Scene & p_scene,
-								 const Ray &   p_ray,
-								 const float   p_tMin,
-								 const float   p_tMax ) const
+										const Ray &	  p_ray,
+										const float	  p_tMin,
+										const float	  p_tMax ) const
 	{
 		HitRecord hitRecord;
 		if ( p_scene.intersect( p_ray, p_tMin, p_tMax, hitRecord ) )
-		{ 
+		{
 			return _directLighting( hitRecord, p_scene, p_tMin );
 		}
 		else { return _backgroundColor; }

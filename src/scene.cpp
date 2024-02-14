@@ -4,6 +4,7 @@
 #include "objects/plane.hpp"
 #include "objects/triangle_mesh.hpp"
 #include "lights/point_light.hpp"
+#include "lights/quad_light.hpp"
 #include <assimp/Importer.hpp>
 #include <assimp/postprocess.h>
 #include <assimp/scene.h>
@@ -55,12 +56,31 @@ namespace RT_ISICG
 
 		// Add lights
 		_addLight( new PointLight( Vec3f( 1.0f, 10.0f, 1.0f ), WHITE, 100.0f) );
-	} 
+	}
+
+	void Scene::_initSceneTP3()
+	{
+		// Add objects.
+		_addObject( new Sphere( "Sphere1", Vec3f( 0.f, 0.f, 3.f ), 1.f ) );
+		_addObject( new Plane( "Plane1", Vec3f( 0.0f, -2.0f, 0.0f ), Vec3f( 0.0f, 1.0f, 0.0f ) ) );
+
+		// Add materials.
+		_addMaterial( new ColorMaterial( "Blue", BLUE ) );
+		_addMaterial( new ColorMaterial( "Red", RED ) );
+
+		// Link objects and materials.
+		_attachMaterialToObject( "Blue", "Sphere1" );
+		_attachMaterialToObject( "Red", "Plane1" );
+
+		// Add lights
+		_addLight( new QuadLight( Vec3f( 1.0f, 10.0f, 2.0f ), Vec3f( -2.0f, 0.0f, 0.0f ), Vec3f( 0.0f, 0.0f, 2.0f ), WHITE, 40.0f ) );
+	}
 
 	void Scene::init()
 	{
 		//_initSceneTP1();
-		_initSceneTP2();
+		//_initSceneTP2();
+		_initSceneTP3();
 	}
 
 	void Scene::loadFileTriangleMesh( const std::string & p_name, const std::string & p_path )

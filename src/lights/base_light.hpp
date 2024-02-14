@@ -12,13 +12,15 @@ namespace RT_ISICG
 		virtual ~BaseLight() = default;
 
 		inline const Vec3f & getFlatColor() const { return _color; }
+		inline const bool & getIsSurface() const { return _isSurface; }
 
 		virtual LightSample sample( const Vec3f & p_point ) const = 0;
 
 	  protected:
 		// TODO: give a name, like objects and materials
 		Vec3f _color = WHITE;
-		float _power = 1.0f;	// permet de régler la puissance des soucres lumineuses
+		float _power = 1.0f;		// permet de régler la puissance des soucres lumineuses
+		bool  _isSurface = true;
 	};
 
 } // namespace RT_ISICG
