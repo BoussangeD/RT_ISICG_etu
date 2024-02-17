@@ -17,7 +17,10 @@ namespace RT_ISICG
 		Vec3f Li( const Scene & p_scene, const Ray & p_ray, const float p_tMin, const float p_tMax ) const override;
 	
 	  private:
-		Vec3f _directLighting( const HitRecord & p_hitRecord, const Scene & p_scene, const float p_tMin ) const; // méthode pour le calcul de l'éclairage direct
+		Vec3f _directLighting( const HitRecord & p_hitRecord,
+							   const BaseLight * p_light,
+							   const Scene &	 p_scene,
+							   const float		 p_tMin ) const; // méthode pour le calcul de l'éclairage direct
 		int	  _nbLightSamples = 32;
 	};
 

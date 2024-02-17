@@ -21,9 +21,9 @@ namespace RT_ISICG
 		virtual LightSample sample( const Vec3f & p_point ) const;
 
 	  private:
-		Vec3f _position = VEC3F_ZERO;
-		Vec3f _u		= VEC3F_ZERO;	// arete coin _u
-		Vec3f _v		= VEC3F_ZERO;	// arete coin _v
+		Vec3f _position = VEC3F_ZERO;	// position en bas à gauche du quad
+		Vec3f _u		= VEC3F_ZERO;	// arete _u ( horizontal )
+		Vec3f _v		= VEC3F_ZERO;	// arete _v ( vertical )
 		Vec3f _n		= VEC3F_ZERO;	// normale
 		float _area		= 0.0f;			// aire du quad
 	};
