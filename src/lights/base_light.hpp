@@ -20,7 +20,7 @@ namespace RT_ISICG
 		// TODO: give a name, like objects and materials
 		Vec3f _color = WHITE;
 		float _power = 1.0f;		// permet de régler la puissance des soucres lumineuses
-		bool  _isSurface = true;
+		bool  _isSurface = false;	// vrai pour un quadLight par exemple
 	};
 
 } // namespace RT_ISICG

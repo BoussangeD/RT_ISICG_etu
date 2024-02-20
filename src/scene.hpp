@@ -46,6 +46,7 @@ namespace RT_ISICG
 		void _initSceneTP1();
 		void _initSceneTP2();
 		void _initSceneTP3();
+		void _initSceneTP4();
 
 	  private:
 		ObjectMap	_objectMap;

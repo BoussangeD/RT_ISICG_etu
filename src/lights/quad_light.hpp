@@ -15,7 +15,9 @@ namespace RT_ISICG
 				   const float	 p_power )
 			: BaseLight( p_color, p_power ), _position( p_position ), _u( p_u ), _v( p_v ), 
 			_n( normalize( cross( p_u, p_v ) ) ), _area( glm::length( p_u ) * glm::length( p_v ) )	// length pour la taille des vecteurs
-		{}
+		{
+			_isSurface = true;
+		}
 		virtual ~QuadLight() = default;
 
 		virtual LightSample sample( const Vec3f & p_point ) const;

@@ -8,23 +8,27 @@ namespace RT_ISICG
 								  HitRecord & p_hitRecord ) const
 	{
 		float  tClosest = p_tMax;			 // Hit distance.
+		float  u		= 0.0f;
+		float  v		= 0.0f;
 		size_t hitTri	= _triangles.size(); // Hit triangle id.
 		for ( size_t i = 0; i < _triangles.size(); i++ )
 		{
-			float t;
-			if ( _triangles[ i ].intersect( p_ray, t ) )
+			float t, temp_u, temp_v;
+			if ( _triangles[ i ].intersect( p_ray, t, temp_u, temp_v ) )
 			{
 				if ( t >= p_tMin && t <= tClosest )
 				{
 					tClosest = t;
 					hitTri	 = i;
+					u		 = temp_u;
+					v		 = temp_v;
 				}
 			}
 		}
 		if ( hitTri != _triangles.size() ) // Intersection found.
 		{
 			p_hitRecord._point	= p_ray.pointAtT( tClosest );
-			p_hitRecord._normal = _triangles[ hitTri ].getFaceNormal();
+			p_hitRecord._normal = _triangles[ hitTri ].getNormalInterpolation( u, v );
 			p_hitRecord.faceNormal( p_ray.getDirection() );
 			p_hitRecord._distance = tClosest;
 			p_hitRecord._object	  = this;
@@ -38,8 +42,8 @@ namespace RT_ISICG
 	{
 		for ( size_t i = 0; i < _triangles.size(); i++ )
 		{
-			float t;
-			if ( _triangles[ i ].intersect( p_ray, t ) )
+			float t, u, v;
+			if ( _triangles[ i ].intersect( p_ray, t, u, v ) )
 			{
 				if ( t >= p_tMin && t <= p_tMax ) return true; // No need to search for the nearest.
 			}
