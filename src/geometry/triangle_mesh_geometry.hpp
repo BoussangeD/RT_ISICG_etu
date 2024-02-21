@@ -21,7 +21,7 @@ namespace RT_ISICG
 		bool intersect( const Ray & p_ray, float & p_t, float & p_u, float & p_v ) const;
 
 		inline const Vec3f & getFaceNormal() const { return _faceNormal; }
-		Vec3f &				 getNormalInterpolation( float & p_u, float & p_v ) const;
+		const Vec3f getNormalInterpolation( float & p_u, float & p_v ) const;
 
 	  private:
 		MeshTriangle * _refMesh;

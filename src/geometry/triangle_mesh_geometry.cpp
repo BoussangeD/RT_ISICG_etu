@@ -53,7 +53,7 @@ namespace RT_ISICG
 		else return false;
 	}
 
-	Vec3f & TriangleMeshGeometry::getNormalInterpolation( float & p_u, float & p_v ) const {
+	const Vec3f TriangleMeshGeometry::getNormalInterpolation( float & p_u, float & p_v ) const {
 		Vec3f n = ( 1 - p_u - p_v ) * _refMesh->_normals[ _v0 ] + p_u * _refMesh->_normals[ _v1 ]
 				  + p_v * _refMesh->_normals[ _v2 ];
 		return n;

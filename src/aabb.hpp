@@ -21,12 +21,24 @@ namespace RT_ISICG
 		// Extends the AABB with a point
 		inline void extend( const Vec3f & p_point )
 		{
-			/// TODO
+			_min.x = std::min( _min.x, p_point.x );
+			_min.y = std::min( _min.y, p_point.y );
+			_min.z = std::min( _min.z, p_point.z );
+
+			_max.x = std::max( _max.x, p_point.x );
+			_max.y = std::max( _max.y, p_point.y );
+			_max.z = std::max( _max.z, p_point.z );
 		}
 		// Extends the AABB with another AABB
 		inline void extend( const AABB & p_aabb )
 		{
-			/// TODO
+			_min.x = std::min( _min.x, p_aabb.getMin().x );
+			_min.y = std::min( _min.y, p_aabb.getMin().y );
+			_min.z = std::min( _min.z, p_aabb.getMin().z );
+
+			_max.x = std::max( _max.x, p_aabb.getMax().x );
+			_max.y = std::max( _max.y, p_aabb.getMax().y );
+			_max.z = std::max( _max.z, p_aabb.getMax().z );
 		}
 
 		// Returns the AABB diagonal vector.

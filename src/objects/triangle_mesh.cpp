@@ -7,6 +7,9 @@ namespace RT_ISICG
 								  const float p_tMax,
 								  HitRecord & p_hitRecord ) const
 	{
+		// on test l'intersection avec AABB en premier et on return faux si pas d'intersection
+		if ( !_aabb.intersect( p_ray, p_tMin, p_tMax ) ) { return false; }
+
 		float  tClosest = p_tMax;			 // Hit distance.
 		float  u		= 0.0f;
 		float  v		= 0.0f;
@@ -40,6 +43,8 @@ namespace RT_ISICG
 
 	bool MeshTriangle::intersectAny( const Ray & p_ray, const float p_tMin, const float p_tMax ) const
 	{
+		if ( !_aabb.intersect( p_ray, p_tMin, p_tMax ) ) { return false; }
+
 		for ( size_t i = 0; i < _triangles.size(); i++ )
 		{
 			float t, u, v;
