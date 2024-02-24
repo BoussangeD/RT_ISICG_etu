@@ -2,7 +2,7 @@
 
 namespace RT_ISICG
 {
-	bool AABB::intersect( const RT_ISICG::Ray & p_ray, const float p_tMin, const float p_tMax ) const
+	bool AABB::intersect( const Ray & p_ray, const float p_tMin, const float p_tMax ) const
 	{
 		// Cf. https://www.scratchapixel.com/lessons/3d-basic-rendering/minimal-ray-tracer-rendering-simple-shapes/ray-box-intersection.html
 		Vec3f invDir = 1.0f / p_ray.getDirection();

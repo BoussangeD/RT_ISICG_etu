@@ -4,6 +4,7 @@
 #include "base_object.hpp"
 #include "geometry/triangle_mesh_geometry.hpp"
 #include "aabb.hpp"
+#include "bvh.hpp"
 #include <vector>
 
 namespace RT_ISICG
@@ -50,6 +51,7 @@ namespace RT_ISICG
 		std::vector<Vec2f>				  _uvs;
 		std::vector<TriangleMeshGeometry> _triangles;
 		AABB							  _aabb;
+		BVH								  _bvh;
 	};
 } // namespace RT_ISICG
 

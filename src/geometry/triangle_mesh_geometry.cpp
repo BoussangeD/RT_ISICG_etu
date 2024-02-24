@@ -33,7 +33,7 @@ namespace RT_ISICG
 		pvec = cross( d, edge2 );
 		det	 = dot( edge1, pvec );
 
-		if ( det > -epsilon && det < epsilon ) return false; // This ray is parallel to this triangle.
+		if ( det > -epsilon && det < epsilon ) return false; // rayon parallèle au triangle
 
 		inv_det = 1.0f / det;
 		tvec = o - v0;
@@ -59,4 +59,13 @@ namespace RT_ISICG
 		return n;
 	}
 
+	const Vec3f TriangleMeshGeometry::getVertex( unsigned int index ) const
+	{
+		if ( _refMesh )
+		{
+			const std::vector<Vec3f> & vertices = _refMesh->_vertices;
+			if ( index < vertices.size() ) { return vertices[ index ]; }
+		}
+		return Vec3f( 0.0f );
+	}
 } // namespace RT_ISICG
