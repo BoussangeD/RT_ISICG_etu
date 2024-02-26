@@ -3,6 +3,7 @@
 namespace RT_ISICG
 {
 	Vec3f DirectLightingIntegrator::_directLighting( const HitRecord & p_hitRecord,
+													 const Ray &	   p_ray,
 													 const BaseLight * p_light,
 													 const Scene &	   p_scene,
 													 const float	   p_tMin ) const
@@ -17,7 +18,9 @@ namespace RT_ISICG
 		if ( !isInShadow )
 		{
 			float cosTheta = glm::max( 0.0f, dot( p_hitRecord._normal, lightSample._direction ) );
-			Vec3f directContribution = p_hitRecord._object->getMaterial()->getFlatColor() * lightSample._radiance * cosTheta;
+			//Vec3f directContribution = p_hitRecord._object->getMaterial()->getFlatColor() * lightSample._radiance * cosTheta;
+			Vec3f directContribution = p_hitRecord._object->getMaterial()->shade( p_ray, p_hitRecord, lightSample )
+									   * lightSample._radiance * cosTheta;
 
 			finalColor += directContribution;
 		}
@@ -39,11 +42,11 @@ namespace RT_ISICG
 				{
 					for ( int i = 0; i < _nbLightSamples; i++ )
 					{
-						finalColor += _directLighting( hitRecord, light, p_scene, p_tMin );
+						finalColor += _directLighting( hitRecord, p_ray, light, p_scene, p_tMin );
 					}
 					finalColor /= _nbLightSamples;
 				}
-				else { finalColor += _directLighting( hitRecord, light, p_scene, p_tMin ); }
+				else { finalColor += _directLighting( hitRecord, p_ray, light, p_scene, p_tMin ); }
 			}
 			return finalColor;
 		}

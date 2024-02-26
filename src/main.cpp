@@ -16,6 +16,7 @@ namespace RT_ISICG
 		Scene scene;
 		scene.init();
 
+		// TP1
 		// position a
 		Vec3f _position_a = Vec3f( 0.0f, 0.0f, -2.0f );
 		Vec3f _lookAt_a	  = Vec3f( 0.0f, 0.0f, 79.0f );
@@ -33,18 +34,22 @@ namespace RT_ISICG
 		Vec3f _lookAt_d	  = Vec3f( -1.0f, -1.0f, 2.0f );
 
 		// position TP4
-		Vec3f _position = Vec3f( 0.0f, 2.0f, -7.0f );
-		Vec3f _lookAt  = Vec3f( 0.0f, 0.0f, 79.0f );
+		Vec3f _position_4 = Vec3f( 0.0f, 2.0f, -7.0f );
+		Vec3f _lookAt_4  = Vec3f( 0.0f, 0.0f, 79.0f );
+
+		// position TP5
+		Vec3f _position_5 = Vec3f( 0.0f, 0.0f, 0.0f );
+		Vec3f _lookAt_5	  = Vec3f( 0.0f, 0.0f, 79.0f );
 
 		// Create a perspective camera.
 		//PerspectiveCamera camera( float( imgWidth ) / imgHeight );	// camera par défaut
-		PerspectiveCamera camera( _position, _lookAt, Vec3f( 0.0f, 1.0f, 0.0f ), 60.0f, float( imgWidth ) / imgHeight );
+		PerspectiveCamera camera( _position_5, _lookAt_5, Vec3f( 0.0f, 1.0f, 0.0f ), 60.0f, float( imgWidth ) / imgHeight );
 
 		// Create and setup the renderer.
 		Renderer renderer;
 		renderer.setIntegrator( IntegratorType::DIRECT_LIGHTING );
 		renderer.setBackgroundColor( GREY );
-		renderer.setNbPixelSamples( 1 );
+		renderer.setNbPixelSamples( 128 );
 
 		// Launch rendering.
 		std::cout << "Rendering..." << std::endl;

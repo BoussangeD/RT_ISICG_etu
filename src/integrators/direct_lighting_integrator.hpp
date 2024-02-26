@@ -18,6 +18,7 @@ namespace RT_ISICG
 	
 	  private:
 		Vec3f _directLighting( const HitRecord & p_hitRecord,
+							   const Ray &		 p_ray,
 							   const BaseLight * p_light,
 							   const Scene &	 p_scene,
 							   const float		 p_tMin ) const; // méthode pour le calcul de l'éclairage direct

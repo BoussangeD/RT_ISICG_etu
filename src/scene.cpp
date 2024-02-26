@@ -1,5 +1,7 @@
 #include "scene.hpp"
 #include "materials/color_material.hpp"
+#include "materials/lambert_material.hpp"
+#include "materials/matte_material.hpp"
 #include "objects/sphere.hpp"
 #include "objects/plane.hpp"
 #include "objects/triangle_mesh.hpp"
@@ -76,7 +78,8 @@ namespace RT_ISICG
 		_addLight( new QuadLight( Vec3f( 1.0f, 10.0f, 2.0f ), Vec3f( -2.0f, 0.0f, 0.0f ), Vec3f( 0.0f, 0.0f, 2.0f ), WHITE, 40.0f ) );
 	}
 
-	void Scene::_initSceneTP4() {
+	void Scene::_initSceneTP4() 
+	{
 		// ================================================================
 		// Add materials .
 		// ================================================================
@@ -115,12 +118,33 @@ namespace RT_ISICG
 		_addLight( new PointLight( Vec3f( 0.f, 3.f, -5.f ), WHITE, 100.0f ) );
 	}
 
+	void Scene::_initSceneTP5()
+	{
+		// Add objects.
+		_addObject( new Sphere( "Sphere1", Vec3f( 0.f, 0.f, 3.f ), 1.f ) );
+		_addObject( new Plane( "Plane1", Vec3f( 0.0f, -2.0f, 0.0f ), Vec3f( 0.0f, 1.0f, 0.0f ) ) );
+
+		// Add materials.
+		_addMaterial( new LambertMaterial( "GreyLambert", GREY ) ); 
+		_addMaterial( new LambertMaterial( "RedLambert", RED ) );
+		_addMaterial( new MatteMaterial( "GreyMatte", GREY, 0.6f ) );
+
+		// Link objects and materials.
+		_attachMaterialToObject( "GreyMatte", "Sphere1" );
+		_attachMaterialToObject( "RedLambert", "Plane1" );
+
+		// Add lights
+		_addLight( new PointLight( Vec3f( 0.0f, 0.0f, -2.0f ), WHITE, 60.0f ) );
+	}
+
+
 	void Scene::init()
 	{
 		//_initSceneTP1();
 		//_initSceneTP2();
 		//_initSceneTP3();
-		_initSceneTP4();
+		//_initSceneTP4();
+		_initSceneTP5();
 	}
 
 	void Scene::loadFileTriangleMesh( const std::string & p_name, const std::string & p_path )
@@ -186,8 +210,8 @@ namespace RT_ISICG
 				aiString mtlName;
 				mtl->Get( AI_MATKEY_NAME, mtlName );
 
-				/*_addMaterial( new ColorMaterial( std::string( mtlName.C_Str() ), kd ) );
-				_attachMaterialToObject( mtlName.C_Str(), meshName );*/
+				_addMaterial( new ColorMaterial( std::string( mtlName.C_Str() ), kd ) );
+				_attachMaterialToObject( mtlName.C_Str(), meshName );
 			}
 
 			std::cout << "-- [DONE] " << triMesh->getNbTriangles() << " triangles, " << triMesh->getNbVertices()

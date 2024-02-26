@@ -7,7 +7,7 @@ namespace RT_ISICG
 								  const float p_tMax,
 								  HitRecord & p_hitRecord ) const
 	{
-		// on test l'intersection avec AABB en premier et on return faux si pas d'intersection
+		// on test l'intersection avec AABB en premier et on retourne faux si pas d'intersection
 		if ( !_aabb.intersect( p_ray, p_tMin, p_tMax ) ) { return false; }
 
 		// intersection avec BVH ensuite
