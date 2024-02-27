@@ -47,7 +47,7 @@ namespace RT_ISICG
 
 		// Create and setup the renderer.
 		Renderer renderer;
-		renderer.setIntegrator( IntegratorType::DIRECT_LIGHTING );
+		renderer.setIntegrator( IntegratorType::DIRECT_LIGHTING );	// RAY_CAST pour le TP1
 		renderer.setBackgroundColor( GREY );
 		renderer.setNbPixelSamples( 128 );
 

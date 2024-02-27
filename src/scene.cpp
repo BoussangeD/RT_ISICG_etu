@@ -2,6 +2,9 @@
 #include "materials/color_material.hpp"
 #include "materials/lambert_material.hpp"
 #include "materials/matte_material.hpp"
+#include "materials/plastic_material.hpp"
+#include "materials/plastic_material_bp.hpp"
+#include "materials/microfacet_material.hpp"
 #include "objects/sphere.hpp"
 #include "objects/plane.hpp"
 #include "objects/triangle_mesh.hpp"
@@ -120,6 +123,7 @@ namespace RT_ISICG
 
 	void Scene::_initSceneTP5()
 	{
+		// EXO1-2 : Lambert et Oren-Nayar
 		// Add objects.
 		_addObject( new Sphere( "Sphere1", Vec3f( 0.f, 0.f, 3.f ), 1.f ) );
 		_addObject( new Plane( "Plane1", Vec3f( 0.0f, -2.0f, 0.0f ), Vec3f( 0.0f, 1.0f, 0.0f ) ) );
@@ -137,14 +141,57 @@ namespace RT_ISICG
 		_addLight( new PointLight( Vec3f( 0.0f, 0.0f, -2.0f ), WHITE, 60.0f ) );
 	}
 
+	void Scene::_initSceneTP5Phong()
+	{
+		// EXO3 : Phong et Blinn-Phong
+		// Add objects.
+		_addObject( new Sphere( "Sphere1", Vec3f( 0.f, 0.f, 3.f ), 1.f ) );
+		_addObject( new Plane( "Plane1", Vec3f( 0.0f, -2.0f, 0.0f ), Vec3f( 0.0f, 1.0f, 0.0f ) ) );
 
+		// Add materials.
+		_addMaterial( new LambertMaterial( "RedLambert", RED ) );
+		_addMaterial( new PlasticMaterial( "GreyPlastic", GREY * 0.7f, GREY * 0.3f, 64.0f ) );		// modèle de Phong
+		_addMaterial( new PlasticMaterialBP( "GreyPlasticBP", GREY * 0.7f, GREY * 0.3f, 64.0f ) );	// modèle de Blinn-Phong
+
+		// Link objects and materials.
+		_attachMaterialToObject( "GreyPlastic", "Sphere1" );
+		_attachMaterialToObject( "RedLambert", "Plane1" );
+
+		// Add lights
+		_addLight( new PointLight( Vec3f( 0.0f, 0.0f, -2.0f ), WHITE, 60.0f ) );
+	}
+
+	void Scene::_initSceneTP5CookTorrance()
+	{
+		// EXO4 : Cook-Torrance
+		// Add objects.
+		_addObject( new Sphere( "Sphere1", Vec3f( 0.f, 0.f, 3.f ), 1.f ) );
+		_addObject( new Plane( "Plane1", Vec3f( 0.0f, -2.0f, 0.0f ), Vec3f( 0.0f, 1.0f, 0.0f ) ) );
+
+		// Add materials.
+		Vec3f F0 = Vec3f( 1.f, 0.85f, 0.57f );
+		// 1: nom, 2. diffuse, 3: specular, 4: rugosite, 5: metalness
+		_addMaterial( new MicrofacetMaterial( "GoldenMicroFacet", F0, F0, 0.3f, 1.0f ) );
+		_addMaterial( new LambertMaterial( "RedLambert", RED ) );
+
+		// Link objects and materials.
+		_attachMaterialToObject( "GoldenMicroFacet", "Sphere1" );
+		_attachMaterialToObject( "RedLambert", "Plane1" );
+
+		// Add lights
+		_addLight( new PointLight( Vec3f( 0.0f, 0.0f, -2.0f ), WHITE, 60.0f ) );
+	}
+
+	// penser à changer les positions de la caméra dans le main en fonction de la scène choisi
 	void Scene::init()
 	{
 		//_initSceneTP1();
 		//_initSceneTP2();
 		//_initSceneTP3();
 		//_initSceneTP4();
-		_initSceneTP5();
+		//_initSceneTP5();
+		//_initSceneTP5Phong();
+		_initSceneTP5CookTorrance();
 	}
 
 	void Scene::loadFileTriangleMesh( const std::string & p_name, const std::string & p_path )

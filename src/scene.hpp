@@ -48,6 +48,8 @@ namespace RT_ISICG
 		void _initSceneTP3();
 		void _initSceneTP4();
 		void _initSceneTP5();
+		void _initSceneTP5Phong();
+		void _initSceneTP5CookTorrance();
 
 	  private:
 		ObjectMap	_objectMap;
