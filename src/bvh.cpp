@@ -41,8 +41,47 @@ namespace RT_ISICG
 						 const unsigned int p_lastTriangleId,
 						 const unsigned int p_depth )
 	{
-		// TODO
+		p_node->_aabb = AABB( Vec3f( FLT_MAX ), Vec3f( -FLT_MAX ) );
+		for ( unsigned int i = p_firstTriangleId; i < p_lastTriangleId; ++i )
+		{
+			const TriangleMeshGeometry & triangle = _triangles->at( i );
+			p_node->_aabb.extend( triangle.getAABB() );
+		}
+
+		if ( p_depth >= _maxDepth || ( p_lastTriangleId - p_firstTriangleId ) <= _maxTrianglesPerLeaf )
+		{
+			p_node->_firstTriangleId = p_firstTriangleId;
+			p_node->_lastTriangleId	 = p_lastTriangleId;
+			return;
+		}
+
+		int largestAxis = (int)p_node->_aabb.largestAxis();
+
+		// calcul du milieu sur l'axe le + long
+		float midpoint = 0.5f * ( p_node->_aabb.getMin()[ largestAxis ] + p_node->_aabb.getMax()[ largestAxis ] );
+
+		unsigned int idPartition = p_firstTriangleId;
+		for ( unsigned int i = p_firstTriangleId; i < p_lastTriangleId; ++i )
+		{
+			const TriangleMeshGeometry & triangle = _triangles->at( i );
+			Vec3f triangleCentroid = triangle.getAABB().centroid();				// calcul du centroid
+
+			if ( triangleCentroid[ largestAxis ] < midpoint )
+			{
+				// on décale le triangle
+				std::swap( _triangles->at( i ), _triangles->at( idPartition ) );
+				++idPartition;
+			}
+		}
+
+		// creation des enfants gauche et droite
+		p_node->_left  = new BVHNode();
+		p_node->_right = new BVHNode();
+
+		_buildRec( p_node->_left, p_firstTriangleId, idPartition, p_depth + 1 );
+		_buildRec( p_node->_right, idPartition, p_lastTriangleId, p_depth + 1 );
 	}
+
 
 	// similaire a la fonction MeshTriangl::intersect
 	bool BVH::_intersectRec( const BVHNode * p_node,
@@ -51,10 +90,8 @@ namespace RT_ISICG
 							 const float	 p_tMax,
 							 HitRecord &	 p_hitRecord ) const
 	{
-		float  tClosest = p_tMax; // Hit distance.
-		float  u		= 0.0f;
-		float  v		= 0.0f;
-		size_t hitTri	= _triangles->size(); // Hit triangle id.
+
+		if ( !p_node->_aabb.intersect( p_ray, p_tMin, p_tMax ) ) { return false; }
 
 		if ( !p_node->isLeaf() )
 		{
@@ -80,8 +117,12 @@ namespace RT_ISICG
 		}
 		else
 		{
-			//for ( size_t i = p_node->_firstTriangleId; i < p_node->_lastTriangleId; i++ )
-			for ( size_t i = 0; i < _triangles->size(); i++ )
+			float  tClosest = p_tMax; // Hit distance.
+			float  u		= 0.0f;
+			float  v		= 0.0f;
+			size_t hitTri	= _triangles->size(); // Hit triangle id.
+
+			for ( size_t i = p_node->_firstTriangleId; i < p_node->_lastTriangleId; i++ )
 			{
 				float t, temp_u, temp_v;
 				if ( ( *_triangles )[ i ].intersect( p_ray, t, temp_u, temp_v ) )
@@ -95,7 +136,6 @@ namespace RT_ISICG
 					}
 				}
 			}
-			// hitTri != p_node->_lastTriangleId
 			if ( hitTri != _triangles->size() ) // Intersection found.
 			{
 				p_hitRecord._point	= p_ray.pointAtT( tClosest );
@@ -114,6 +154,8 @@ namespace RT_ISICG
 								const float		p_tMin,
 								const float		p_tMax ) const
 	{
+		if ( !p_node->_aabb.intersect( p_ray, p_tMin, p_tMax ) ) { return false; }
+
 		if ( !p_node->isLeaf() )
 		{
 			bool hitLeft	= _intersectAnyRec( p_node->_left, p_ray, p_tMin, p_tMax );

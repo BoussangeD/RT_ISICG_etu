@@ -58,14 +58,4 @@ namespace RT_ISICG
 				  + p_v * _refMesh->_normals[ _v2 ];
 		return n;
 	}
-
-	const Vec3f TriangleMeshGeometry::getVertex( unsigned int index ) const
-	{
-		if ( _refMesh )
-		{
-			const std::vector<Vec3f> & vertices = _refMesh->_vertices;
-			if ( index < vertices.size() ) { return vertices[ index ]; }
-		}
-		return Vec3f( 0.0f );
-	}
 } // namespace RT_ISICG

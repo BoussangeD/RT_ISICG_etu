@@ -131,7 +131,7 @@ namespace RT_ISICG
 		// Add materials.
 		_addMaterial( new LambertMaterial( "GreyLambert", GREY ) ); 
 		_addMaterial( new LambertMaterial( "RedLambert", RED ) );
-		_addMaterial( new MatteMaterial( "GreyMatte", GREY, 0.6f ) );
+		_addMaterial( new MatteMaterial( "GreyMatte", GREY, 0.0f ) );
 
 		// Link objects and materials.
 		_attachMaterialToObject( "GreyMatte", "Sphere1" );
@@ -150,7 +150,7 @@ namespace RT_ISICG
 
 		// Add materials.
 		_addMaterial( new LambertMaterial( "RedLambert", RED ) );
-		_addMaterial( new PlasticMaterial( "GreyPlastic", GREY * 0.7f, GREY * 0.3f, 64.0f ) );		// modèle de Phong
+		_addMaterial( new PlasticMaterial( "GreyPlastic", GREY * 0.7f, GREY * 0.3f, 8.0f ) );		// modèle de Phong
 		_addMaterial( new PlasticMaterialBP( "GreyPlasticBP", GREY * 0.7f, GREY * 0.3f, 64.0f ) );	// modèle de Blinn-Phong
 
 		// Link objects and materials.
@@ -235,6 +235,8 @@ namespace RT_ISICG
 				triMesh->addTriangle( face.mIndices[ 0 ], face.mIndices[ 1 ], face.mIndices[ 2 ] );
 			}
 
+			// TODO : activer ou desactiver le bvh en fonction
+			triMesh->buildBVH();
 			_addObject( triMesh );
 
 			const aiMaterial * const mtl = scene->mMaterials[ mesh->mMaterialIndex ];

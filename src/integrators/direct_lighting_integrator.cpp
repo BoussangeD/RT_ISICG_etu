@@ -10,7 +10,7 @@ namespace RT_ISICG
 	{
 		Vec3f		finalColor	= VEC3F_ZERO;
 		LightSample lightSample = p_light->sample( p_hitRecord._point );
-		Ray			shadowRay( p_hitRecord._point, lightSample._direction );
+		Ray			shadowRay   = Ray( p_hitRecord._point, lightSample._direction );
 		shadowRay.offset( p_hitRecord._normal ); // offset pour débruiter
 
 		bool isInShadow = p_scene.intersectAny( shadowRay, p_tMin, lightSample._distance );
