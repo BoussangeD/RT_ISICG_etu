@@ -48,17 +48,11 @@ namespace RT_ISICG
 			p_node->_aabb.extend( triangle.getAABB() );
 		}
 
-		if ( p_depth >= _maxDepth || ( p_lastTriangleId - p_firstTriangleId ) <= _maxTrianglesPerLeaf )
-		{
-			p_node->_firstTriangleId = p_firstTriangleId;
-			p_node->_lastTriangleId	 = p_lastTriangleId;
-			return;
-		}
+		// critère d'arret
+		if ( p_depth >= _maxDepth || ( p_lastTriangleId - p_firstTriangleId ) <= _maxTrianglesPerLeaf ) { return; }
 
-		int largestAxis = (int)p_node->_aabb.largestAxis();
-
-		// calcul du milieu sur l'axe le + long
-		float midpoint = 0.5f * ( p_node->_aabb.getMin()[ largestAxis ] + p_node->_aabb.getMax()[ largestAxis ] );
+		int largestAxis = (int)p_node->_aabb.largestAxis();			// axe le + long
+		float midpoint = p_node->_aabb.centroid()[ largestAxis ];	// calcul du milieu sur l'axe le + long
 
 		unsigned int idPartition = p_firstTriangleId;
 		for ( unsigned int i = p_firstTriangleId; i < p_lastTriangleId; ++i )
@@ -74,7 +68,7 @@ namespace RT_ISICG
 			}
 		}
 
-		// creation des enfants gauche et droite
+		// creation des enfants gauche et droit
 		p_node->_left  = new BVHNode();
 		p_node->_right = new BVHNode();
 
@@ -83,7 +77,7 @@ namespace RT_ISICG
 	}
 
 
-	// similaire a la fonction MeshTriangl::intersect
+	// similaire a la fonction MeshTriangle::intersect
 	bool BVH::_intersectRec( const BVHNode * p_node,
 							 const Ray &	 p_ray,
 							 const float	 p_tMin,
@@ -149,6 +143,7 @@ namespace RT_ISICG
 		return false;
 	}
 
+	// similaire a la fonction MeshTriangle::intersectAny
 	bool BVH::_intersectAnyRec( const BVHNode * p_node,
 								const Ray &		p_ray,
 								const float		p_tMin,

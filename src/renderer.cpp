@@ -1,6 +1,7 @@
 #include "renderer.hpp"
 #include "integrators/ray_cast_integrator.hpp"
 #include "integrators/direct_lighting_integrator.hpp"
+#include "integrators/whitted_integrator.hpp"
 #include "utils/console_progress_bar.hpp"
 #include "utils/random.hpp"
 
@@ -15,6 +16,7 @@ namespace RT_ISICG
 		switch ( p_integratorType )
 		{
 		case IntegratorType::DIRECT_LIGHTING: _integrator = new DirectLightingIntegrator(); break;	// nouvel integrateur
+		case IntegratorType::WHITTED: _integrator = new WhittedIntegrator(); break;
 		case IntegratorType::RAY_CAST:
 		default:
 		{
@@ -76,7 +78,7 @@ namespace RT_ISICG
 					float sx = (float)(i + randomFloat()) / width;
 					float sy = (float)(j + randomFloat()) / height;
 					Ray	  ray	   = p_camera->generateRay( sx, sy );
-					Vec3f colorRay = _integrator->Li( p_scene, ray, 0.0f, 1000.0f );
+					Vec3f colorRay = _integrator->Li( p_scene, ray, 0.0f, 10000.0f );
 					finalColor	   += colorRay;
 				}
 				finalColor /= _nbPixelSamples;

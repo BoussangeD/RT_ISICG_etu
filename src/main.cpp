@@ -37,17 +37,25 @@ namespace RT_ISICG
 		Vec3f _position_4 = Vec3f( 0.0f, 2.0f, -7.0f );
 		Vec3f _lookAt_4  = Vec3f( 0.0f, 0.0f, 79.0f );
 
+		// position TP4_conf
+		Vec3f _position_4c = Vec3f( -250.0f, 500.0f, 330.0f );
+		Vec3f _lookAt_4c   = Vec3f( 0.0f, 350.0f, 100.0f );
+
 		// position TP5
 		Vec3f _position_5 = Vec3f( 0.0f, 0.0f, 0.0f );
 		Vec3f _lookAt_5	  = Vec3f( 0.0f, 0.0f, 79.0f );
 
+		// position TP6
+		Vec3f _position_6 = Vec3f( 0.0f, 2.0f, -6.0f );
+		Vec3f _lookAt_6	  = Vec3f( 0.0f, 0.0f, 79.0f );
+
 		// Create a perspective camera.
 		//PerspectiveCamera camera( float( imgWidth ) / imgHeight );	// camera par défaut
-		PerspectiveCamera camera( _position_5, _lookAt_5, Vec3f( 0.0f, 1.0f, 0.0f ), 60.0f, float( imgWidth ) / imgHeight );
+		PerspectiveCamera camera( _position_6, _lookAt_6, Vec3f( 0.0f, 1.0f, 0.0f ), 60.0f, float( imgWidth ) / imgHeight );
 
 		// Create and setup the renderer.
 		Renderer renderer;
-		renderer.setIntegrator( IntegratorType::DIRECT_LIGHTING );	// RAY_CAST pour le TP1
+		renderer.setIntegrator( IntegratorType::WHITTED ); // RAY_CAST -> TP1, DIRECT_LIGHTING -> TP2-5, WHITTED -> TP6
 		renderer.setBackgroundColor( GREY );
 		renderer.setNbPixelSamples( 128 );
 
