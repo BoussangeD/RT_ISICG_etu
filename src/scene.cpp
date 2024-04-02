@@ -10,6 +10,7 @@
 #include "objects/sphere.hpp"
 #include "objects/plane.hpp"
 #include "objects/triangle_mesh.hpp"
+#include "objects/implicit_sphere.hpp"
 #include "lights/point_light.hpp"
 #include "lights/quad_light.hpp"
 #include <assimp/Importer.hpp>
@@ -308,6 +309,23 @@ namespace RT_ISICG
 		// Vec3f ( 0.f, 1.f, 2.f ) , WHITE , 40.f ) );
 	}
 
+	void Scene::_initSceneTP7() {
+		// Add objects.
+		_addObject( new ImplicitSphere( "ImplicitSphere", Vec3f( 0.f, 0.f, 3.f ), 1.f ) );
+		_addObject( new Plane( "Plane1", Vec3f( 0.0f, -2.0f, 0.0f ), Vec3f( 0.0f, 1.0f, 0.0f ) ) );
+
+		// Add materials.
+		_addMaterial( new ColorMaterial( "Blue", BLUE ) );
+		_addMaterial( new ColorMaterial( "Red", RED ) );
+
+		// Link objects and materials.
+		_attachMaterialToObject( "Blue", "ImplicitSphere" );
+		_attachMaterialToObject( "Red", "Plane1" );
+
+		// Add lights
+		_addLight( new PointLight( Vec3f( 1.0f, 10.0f, 1.0f ), WHITE, 100.0f ) );
+	}
+
 	// penser à changer les positions de la caméra dans le main en fonction de la scène choisi
 	void Scene::init()
 	{
@@ -320,7 +338,8 @@ namespace RT_ISICG
 		//_initSceneTP5Phong();
 		//_initSceneTP5CookTorrance();
 		//_initSceneTP6Mirror();
-		_initSceneTP6Transparent();
+		//_initSceneTP6Transparent();
+		_initSceneTP7();
 	}
 
 	void Scene::loadFileTriangleMesh( const std::string & p_name, const std::string & p_path )

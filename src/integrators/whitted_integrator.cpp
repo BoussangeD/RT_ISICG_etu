@@ -71,7 +71,7 @@ namespace RT_ISICG
 				float iorT = p_inObject ? 1.0f : hitRecord._object->getMaterial()->getIOR();
 
 				float cosThetaI = dot( hitRecord._normal, -p_ray.getDirection() );
-				float sinThetaI = sqrt( 1 - cosThetaI * cosThetaI );
+				float sinThetaI = sqrt( 1 - cosThetaI * cosThetaI );	// sin^2(x) + cos^2(x) = 1
 				float sinThetaT = iorI / iorT * sinThetaI;
 
 				if ( sinThetaT >= 1.0 )	// permet de vérifier la réflexion totale
