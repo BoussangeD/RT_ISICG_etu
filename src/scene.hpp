@@ -53,7 +53,8 @@ namespace RT_ISICG
 		void _initSceneTP5CookTorrance();
 		void _initSceneTP6Mirror();
 		void _initSceneTP6Transparent();
-		void _initSceneTP7();
+		void _initSceneTP7Sphere();
+		void _initSceneTP7DeathStar();
 
 	  private:
 		ObjectMap	_objectMap;

@@ -35,14 +35,14 @@ namespace RT_ISICG
 	bool ImplicitSurface::intersectAny( const Ray & p_ray, const float p_tMin, const float p_tMax ) const
 	{
 		float t		  = p_tMin;
-		float d		  = 0; // distance
+		float d		  = 0;	// distance
 		Vec3f point_t = VEC3F_ZERO;
 
 		while ( t < p_tMax ) {
 			point_t = p_ray.pointAtT( t );
 			d		= _sdf( point_t );
 
-			if ( t >= p_tMax && t <= p_tMax ) { 
+			if ( d < 0.0001f ) { 
 				return true;
 			}
 

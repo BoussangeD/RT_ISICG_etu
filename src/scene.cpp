@@ -11,6 +11,7 @@
 #include "objects/plane.hpp"
 #include "objects/triangle_mesh.hpp"
 #include "objects/implicit_sphere.hpp"
+#include "objects/implicit_death_star.hpp"
 #include "lights/point_light.hpp"
 #include "lights/quad_light.hpp"
 #include <assimp/Importer.hpp>
@@ -309,7 +310,8 @@ namespace RT_ISICG
 		// Vec3f ( 0.f, 1.f, 2.f ) , WHITE , 40.f ) );
 	}
 
-	void Scene::_initSceneTP7() {
+	void Scene::_initSceneTP7Sphere()
+	{
 		// Add objects.
 		_addObject( new ImplicitSphere( "ImplicitSphere", Vec3f( 0.f, 0.f, 3.f ), 1.f ) );
 		_addObject( new Plane( "Plane1", Vec3f( 0.0f, -2.0f, 0.0f ), Vec3f( 0.0f, 1.0f, 0.0f ) ) );
@@ -320,6 +322,24 @@ namespace RT_ISICG
 
 		// Link objects and materials.
 		_attachMaterialToObject( "Blue", "ImplicitSphere" );
+		_attachMaterialToObject( "Red", "Plane1" );
+
+		// Add lights
+		_addLight( new PointLight( Vec3f( 1.0f, 10.0f, 1.0f ), WHITE, 100.0f ) );
+	}
+
+	void Scene::_initSceneTP7DeathStar()
+	{
+		// Add objects.
+		_addObject( new ImplicitDeathStar( "ImplicitDS", Vec3f( 0.0f, 0.f, 3.5f ), 1.0f, 1.0f, 1.5f ) );
+		_addObject( new Plane( "Plane1", Vec3f( 0.0f, -2.0f, 0.0f ), Vec3f( 0.0f, 1.0f, 0.0f ) ) );
+
+		// Add materials.
+		_addMaterial( new ColorMaterial( "Blue", BLUE ) );
+		_addMaterial( new ColorMaterial( "Red", RED ) );
+
+		// Link objects and materials.
+		_attachMaterialToObject( "Blue", "ImplicitDS" );
 		_attachMaterialToObject( "Red", "Plane1" );
 
 		// Add lights
@@ -339,7 +359,8 @@ namespace RT_ISICG
 		//_initSceneTP5CookTorrance();
 		//_initSceneTP6Mirror();
 		//_initSceneTP6Transparent();
-		_initSceneTP7();
+		//_initSceneTP7Sphere();
+		_initSceneTP7DeathStar();
 	}
 
 	void Scene::loadFileTriangleMesh( const std::string & p_name, const std::string & p_path )
