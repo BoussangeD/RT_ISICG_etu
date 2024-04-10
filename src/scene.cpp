@@ -12,6 +12,7 @@
 #include "objects/triangle_mesh.hpp"
 #include "objects/implicit_sphere.hpp"
 #include "objects/implicit_death_star.hpp"
+#include "objects/implicit_mandelbulb.hpp"
 #include "lights/point_light.hpp"
 #include "lights/quad_light.hpp"
 #include <assimp/Importer.hpp>
@@ -346,6 +347,24 @@ namespace RT_ISICG
 		_addLight( new PointLight( Vec3f( 1.0f, 10.0f, 1.0f ), WHITE, 100.0f ) );
 	}
 
+	void Scene::_initSceneTP7Mandelbulb()
+	{
+		// Add objects.
+		_addObject( new ImplicitMandelbulb( "ImplicitMB", Vec3f( 0.0f, 0.0f, 0.0f ), 8.0f, 4 ) );
+		_addObject( new Plane( "Plane1", Vec3f( 0.0f, -2.0f, 0.0f ), Vec3f( 0.0f, 1.0f, 0.0f ) ) );
+
+		// Add materials.
+		_addMaterial( new ColorMaterial( "Blue", BLUE ) );
+		_addMaterial( new ColorMaterial( "Red", RED ) );
+
+		// Link objects and materials.
+		_attachMaterialToObject( "Blue", "ImplicitMB" );
+		_attachMaterialToObject( "Red", "Plane1" );
+
+		// Add lights
+		_addLight( new PointLight( Vec3f( 0.0f, 0.0f, -4.0f ), WHITE, 10.0f ) );
+	}
+
 	// penser à changer les positions de la caméra dans le main en fonction de la scène choisi
 	void Scene::init()
 	{
@@ -360,7 +379,8 @@ namespace RT_ISICG
 		//_initSceneTP6Mirror();
 		//_initSceneTP6Transparent();
 		//_initSceneTP7Sphere();
-		_initSceneTP7DeathStar();
+		//_initSceneTP7DeathStar();
+		_initSceneTP7Mandelbulb();
 	}
 
 	void Scene::loadFileTriangleMesh( const std::string & p_name, const std::string & p_path )

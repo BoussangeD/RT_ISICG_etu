@@ -262,5 +262,8 @@
     <ClInclude Include="src\objects\implicit_death_star.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="src\objects\implicit_mandelbulb.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

@@ -57,9 +57,13 @@ namespace RT_ISICG
 		Vec3f _position_7ds = Vec3f( 6.0f, 0.0f, 5.0f );
 		Vec3f _lookAt_7ds	= Vec3f( -100.0f, 0.0f, 0.0f );
 
+		// position TP7Mandelbulb
+		Vec3f _position_7mb = Vec3f( 0.0f, 0.0f, -4.0f );
+		Vec3f _lookAt_7mb	  = Vec3f( 0.0f, 0.0f, 79.0f );
+
 		// Create a perspective camera.
 		//PerspectiveCamera camera( float( imgWidth ) / imgHeight );	// camera par défaut
-		PerspectiveCamera camera( _position_7ds, _lookAt_7ds, Vec3f( 0.0f, 1.0f, 0.0f ), 60.0f, float( imgWidth ) / imgHeight );
+		PerspectiveCamera camera( _position_7mb, _lookAt_7mb, Vec3f( 0.0f, 1.0f, 0.0f ), 60.0f, float( imgWidth ) / imgHeight );
 
 		// Create and setup the renderer.
 		Renderer renderer;

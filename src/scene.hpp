@@ -55,6 +55,7 @@ namespace RT_ISICG
 		void _initSceneTP6Transparent();
 		void _initSceneTP7Sphere();
 		void _initSceneTP7DeathStar();
+		void _initSceneTP7Mandelbulb();
 
 	  private:
 		ObjectMap	_objectMap;
