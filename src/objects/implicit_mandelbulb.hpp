@@ -38,7 +38,6 @@ namespace RT_ISICG
 				theta	 = theta * _power;
 				phi	 = phi * _power;
 
-				//z = zr * Vec3f( sin( theta ) * cos( phi ), cos( theta ), sin( phi ) * sin( theta ) );
 				z = zr * Vec3f( cos( theta ) * cos( phi ), sin( theta ), cos( theta ) * sin( phi ) );
 				z += p_point;
 			}

@@ -15,6 +15,7 @@
 #include "objects/implicit_mandelbulb.hpp"
 #include "lights/point_light.hpp"
 #include "lights/quad_light.hpp"
+#include "lights/sphere_light.hpp"
 #include <assimp/Importer.hpp>
 #include <assimp/postprocess.h>
 #include <assimp/scene.h>
@@ -84,6 +85,7 @@ namespace RT_ISICG
 
 		// Add lights
 		_addLight( new QuadLight( Vec3f( 1.0f, 10.0f, 2.0f ), Vec3f( -2.0f, 0.0f, 0.0f ), Vec3f( 0.0f, 0.0f, 2.0f ), WHITE, 40.0f ) );
+		//_addLight( new SphereLight( Vec3f( 1.0f, 10.0f, 2.0f ), 2.0f, WHITE, 8.0f ) );
 	}
 
 	void Scene::_initSceneTP4() 
@@ -372,15 +374,14 @@ namespace RT_ISICG
 		//_initSceneTP2();
 		//_initSceneTP3();
 		//_initSceneTP4();
-		//_initSceneTP4conf();
 		//_initSceneTP5();
 		//_initSceneTP5Phong();
 		//_initSceneTP5CookTorrance();
 		//_initSceneTP6Mirror();
 		//_initSceneTP6Transparent();
-		//_initSceneTP7Sphere();
+		_initSceneTP7Sphere();
 		//_initSceneTP7DeathStar();
-		_initSceneTP7Mandelbulb();
+		//_initSceneTP7Mandelbulb();
 	}
 
 	void Scene::loadFileTriangleMesh( const std::string & p_name, const std::string & p_path )
