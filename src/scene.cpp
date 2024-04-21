@@ -13,6 +13,8 @@
 #include "objects/implicit_sphere.hpp"
 #include "objects/implicit_death_star.hpp"
 #include "objects/implicit_mandelbulb.hpp"
+#include "objects/implicit_box.hpp"
+#include "objects/CSG.hpp"
 #include "lights/point_light.hpp"
 #include "lights/quad_light.hpp"
 #include "lights/sphere_light.hpp"
@@ -334,7 +336,7 @@ namespace RT_ISICG
 	void Scene::_initSceneTP7DeathStar()
 	{
 		// Add objects.
-		_addObject( new ImplicitDeathStar( "ImplicitDS", Vec3f( 0.0f, 0.f, 3.5f ), 1.0f, 1.0f, 1.5f ) );
+		_addObject( new ImplicitDeathStar( "ImplicitDS", Vec3f( 0.0f, 0.0f, 3.5f ), 1.0f, 1.0f, 1.5f ) );
 		_addObject( new Plane( "Plane1", Vec3f( 0.0f, -2.0f, 0.0f ), Vec3f( 0.0f, 1.0f, 0.0f ) ) );
 
 		// Add materials.
@@ -367,6 +369,37 @@ namespace RT_ISICG
 		_addLight( new PointLight( Vec3f( 0.0f, 0.0f, -4.0f ), WHITE, 10.0f ) );
 	}
 
+	void Scene::_initSceneProjet() 
+	{
+		ImplicitBox * Box = new ImplicitBox( "ImplicitBox",
+											  Vec3f( 0.0f, 0.0f, 6.0f ),
+											  Vec3f( 1.0f, 0.5f, 2.0f ),
+											  glm::radians( 30.0f ),
+											  Vec3f( 0.0f, 1.0f, 0.0f ) );
+
+		ImplicitSphere * Sphere = new ImplicitSphere( "ImplicitSphere", Vec3f( -2.9f, 0.5f, 5.f ), 0.8f );
+		CSG *			 unionObject = new CSG( "CSG", CSG::Operation::SUBTRACTION, Sphere, Box );
+
+		_addObject( unionObject );
+		_addObject( new Plane( "PlaneGround", Vec3f( 0.0f, -2.0f, 0.0f ), Vec3f( 0.0f, 1.0f, 0.0f ) ) );
+		_addObject( new Plane( "PlaneFront", Vec3f( 0.f, 0.f, 20.f ), Vec3f( 0.f, 0.f, -1.f ) ) );
+
+		// Add materials.
+		Vec3f F0 = Vec3f( 1.f, 0.85f, 0.57f );
+		// 1: nom, 2. diffuse, 3: specular, 4: rugosite, 5: metalness
+		_addMaterial( new MicrofacetMaterial( "GoldenMicroFacet", F0, F0, 0.3f, 0.0f ) );
+		_addMaterial( new ColorMaterial( "Grey", GREY ) );
+		_addMaterial( new ColorMaterial( "Red", RED ) );
+
+		// Link objects and materials.
+		_attachMaterialToObject( "GoldenMicroFacet", "CSG" );
+		_attachMaterialToObject( "Grey", "PlaneGround" );
+		_attachMaterialToObject( "Grey", "PlaneFront" );
+
+		// Add lights
+		_addLight( new PointLight( Vec3f( -4.0f, 10.0f, 0.0f ), WHITE, 200.0f ) );
+	}
+
 	// penser à changer les positions de la caméra dans le main en fonction de la scène choisi
 	void Scene::init()
 	{
@@ -379,9 +412,10 @@ namespace RT_ISICG
 		//_initSceneTP5CookTorrance();
 		//_initSceneTP6Mirror();
 		//_initSceneTP6Transparent();
-		_initSceneTP7Sphere();
+		//_initSceneTP7Sphere();
 		//_initSceneTP7DeathStar();
 		//_initSceneTP7Mandelbulb();
+		_initSceneProjet();
 	}
 
 	void Scene::loadFileTriangleMesh( const std::string & p_name, const std::string & p_path )

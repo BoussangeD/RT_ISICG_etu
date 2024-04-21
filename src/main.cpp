@@ -61,9 +61,13 @@ namespace RT_ISICG
 		Vec3f _position_7mb = Vec3f( 0.0f, 0.0f, -4.0f );
 		Vec3f _lookAt_7mb	  = Vec3f( 0.0f, 0.0f, 79.0f );
 
+		// position CSG
+		Vec3f _position_csg = Vec3f( -3.0f, 5.0f, -4.0f );
+		Vec3f _lookAt_csg   = Vec3f( 0.0f, -30.0f, 79.0f );
+
 		// Create a perspective camera.
 		//PerspectiveCamera camera( float( imgWidth ) / imgHeight );	// camera par défaut
-		PerspectiveCamera camera( _position_a, _lookAt_a, Vec3f( 0.0f, 1.0f, 0.0f ), 60.0f, float( imgWidth ) / imgHeight );
+		PerspectiveCamera camera( _position_csg, _lookAt_csg, Vec3f( 0.0f, 1.0f, 0.0f ), 60.0f, float( imgWidth ) / imgHeight );
 
 		// Create and setup the renderer.
 		Renderer renderer;

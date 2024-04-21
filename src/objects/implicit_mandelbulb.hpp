@@ -16,6 +16,7 @@ namespace RT_ISICG
 			: ImplicitSurface( p_name ), _center( p_center ), _power( p_power ), _nbIterations( p_nbIterations )
 		{
 		}
+		float getSDF( const Vec3f & point ) const override { return _sdf( point ); }
 
 	  private:
 		float _sdf( const Vec3f & p_point ) const override
@@ -38,7 +39,7 @@ namespace RT_ISICG
 				theta	 = theta * _power;
 				phi	 = phi * _power;
 
-				z = zr * Vec3f( cos( theta ) * cos( phi ), sin( theta ), cos( theta ) * sin( phi ) );
+				z = zr * Vec3f( sin( theta ) * cos( phi ), cos( theta ), sin( theta ) * sin( phi ) );
 				z += p_point;
 			}
 			return 0.5f * glm::log( r ) * r / dr;

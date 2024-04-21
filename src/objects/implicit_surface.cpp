@@ -2,6 +2,7 @@
 
 namespace RT_ISICG
 {
+	// Cf. https://graphics.stanford.edu/courses/cs348b-20-spring-content/uploads/hart.pdf (page 12)
 	bool ImplicitSurface::intersect( const Ray & p_ray,
 									 const float p_tMin,
 									 const float p_tMax,

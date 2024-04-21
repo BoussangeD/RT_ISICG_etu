@@ -17,8 +17,10 @@ namespace RT_ISICG
 		{
 		}
 
+		float getSDF( const Vec3f & point ) const { return _sdf( point ); }
+
 	  private:
-		float _sdf( const Vec3f& p_point ) const override {
+		float _sdf( const Vec3f & p_point ) const override {
 			  return glm::length( p_point - _center ) - _radius;
 		}
 

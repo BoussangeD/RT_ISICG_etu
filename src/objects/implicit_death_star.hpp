@@ -16,6 +16,7 @@ namespace RT_ISICG
 			: ImplicitSurface( p_name ), _center( p_center ), _ra( ra ), _rb( rb ), _distance( p_dist )
 		{
 		}
+		float getSDF( const Vec3f & point ) const override { return _sdf( point ); }
 
 	  private:
 		float _sdf( const Vec3f & p_point ) const override {
