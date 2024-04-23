@@ -58,11 +58,11 @@ namespace RT_ISICG
 		Vec3f _lookAt_7ds	= Vec3f( -100.0f, 0.0f, 0.0f );
 
 		// position TP7Mandelbulb
-		Vec3f _position_7mb = Vec3f( 0.0f, 0.0f, -4.0f );
+		Vec3f _position_7mb = Vec3f( 0.0f, 0.0f, -200.0f );
 		Vec3f _lookAt_7mb	  = Vec3f( 0.0f, 0.0f, 79.0f );
 
 		// position CSG
-		Vec3f _position_csg = Vec3f( -3.0f, 5.0f, -4.0f );
+		Vec3f _position_csg = Vec3f( -3.0f, 5.0f, -10.0f );
 		Vec3f _lookAt_csg   = Vec3f( 0.0f, -30.0f, 79.0f );
 
 		// Create a perspective camera.

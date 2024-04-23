@@ -24,6 +24,7 @@ namespace RT_ISICG
 		inline const Vec3f & getFaceNormal() const { return _faceNormal; }
 		const Vec3f getNormalInterpolation( float & p_u, float & p_v ) const;
 		inline const AABB & getAABB() const { return _aabb; };
+		MeshTriangle * getRefMesh() { return _refMesh; }
 
 	  private:
 		MeshTriangle * _refMesh;

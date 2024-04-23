@@ -10,12 +10,7 @@ namespace RT_ISICG
 		// on test l'intersection avec AABB en premier et on retourne faux si pas d'intersection
 		if ( !_aabb.intersect( p_ray, p_tMin, p_tMax ) ) { return false; }
 
-		// test intersection avec BVH ensuite
-		if ( _bvh.intersect( p_ray, p_tMin, p_tMax, p_hitRecord ) )
-		{
-			p_hitRecord._object = this;
-			return true;
-		}
+		return _bvh.intersect( p_ray, p_tMin, p_tMax, p_hitRecord );
 
 		float  tClosest = p_tMax;			 // Hit distance.
 		float  u		= 0.0f;
@@ -52,7 +47,7 @@ namespace RT_ISICG
 	{
 		if ( !_aabb.intersect( p_ray, p_tMin, p_tMax ) ) { return false; }
 
-		if ( _bvh.intersectAny( p_ray, p_tMin, p_tMax ) ) { return true; }
+		return _bvh.intersectAny( p_ray, p_tMin, p_tMax );
 
 		for ( size_t i = 0; i < _triangles.size(); i++ )
 		{

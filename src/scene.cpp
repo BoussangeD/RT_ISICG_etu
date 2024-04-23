@@ -18,6 +18,7 @@
 #include "lights/point_light.hpp"
 #include "lights/quad_light.hpp"
 #include "lights/sphere_light.hpp"
+#include "lights/spot_light.hpp"
 #include <assimp/Importer.hpp>
 #include <assimp/postprocess.h>
 #include <assimp/scene.h>
@@ -132,41 +133,11 @@ namespace RT_ISICG
 
 	void Scene::_initSceneTP4conf()
 	{
-		// ================================================================
-		// Add materials .
-		// ================================================================
-		_addMaterial( new ColorMaterial( "RedColor", RED ) );
-		_addMaterial( new ColorMaterial( "GreenColor", GREEN ) );
-		_addMaterial( new ColorMaterial( "BlueColor", BLUE ) );
-		_addMaterial( new ColorMaterial( "GreyColor", GREY ) );
-		_addMaterial( new ColorMaterial( "MagentaColor", MAGENTA ) );
-		_addMaterial( new ColorMaterial( "YellowColor", YELLOW ) );
-		_addMaterial( new ColorMaterial( "CyanColor", CYAN ) );
-
-		// ================================================================
-		// Add objects .
-		// ================================================================
 		// OBJ.
 		const std::string DATA_PATH = "../RT_ISICG_etu-master/data/conference/";
 		loadFileTriangleMesh( "conference", DATA_PATH + "conference.obj" );
 
-		// Pseudo Cornell box made with infinite planes .
-		_addObject( new Plane( "PlaneGround", Vec3f( 0.f, -3.f / 0.003f, 0.f ), Vec3f( 0.f, 1.f / 0.003f, 0.f ) ) );
-		_attachMaterialToObject( "GreyColor", "PlaneGround" );
-		_addObject( new Plane( "PlaneLeft", Vec3f( 5.f / 0.003f, 0.f, 0.f ), Vec3f( -1.f / 0.003f, 0.f, 0.f ) ) );
-		_attachMaterialToObject( "RedColor", "PlaneLeft" );
-		_addObject( new Plane( "PlaneCeiling", Vec3f( 0.f, 7.f / 0.003f, 0.f ), Vec3f( 0.f, -1.f / 0.003f, 0.f ) ) );
-		_attachMaterialToObject( "GreenColor", "PlaneCeiling" );
-		_addObject( new Plane( "PlaneRight", Vec3f( -5.f / 0.003f, 0.f, 0.f ), Vec3f( 1.f / 0.003f, 0.f, 0.f ) ) );
-		_attachMaterialToObject( "BlueColor", "PlaneRight" );
-		_addObject( new Plane( "PlaneFront", Vec3f( 0.f, 0.f, 10.f / 0.003f ), Vec3f( 0.f, 0.f, -1.f / 0.003f ) ) );
-		_attachMaterialToObject( "MagentaColor", "PlaneFront" );
-		_addObject( new Plane( "PlaneRear", Vec3f( 0.f, 0.f, -10.f / 0.003f ), Vec3f( 0.f, 0.f, 1.f / 0.003f ) ) );
-		_attachMaterialToObject( "YellowColor", "PlaneRear" );
-
-		// ================================================================
-		// Add lights .
-		// ================================================================
+		// Add lights 
 		_addLight( new QuadLight( Vec3f( 900.f, 600.f, -300.f ), Vec3f( -800.0f, 0.0f, 0.0f ), Vec3f( 0.0f, 0.0f, 300.0f ), WHITE, 20.0f ) );
 	}
 
@@ -378,7 +349,7 @@ namespace RT_ISICG
 											  Vec3f( 0.0f, 1.0f, 0.0f ) );
 
 		ImplicitSphere * Sphere = new ImplicitSphere( "ImplicitSphere", Vec3f( -2.9f, 0.5f, 5.f ), 0.8f );
-		CSG *			 unionObject = new CSG( "CSG", CSG::Operation::SUBTRACTION, Sphere, Box );
+		CSG *			 unionObject = new CSG( "CSG", CSG::Operation::SMOOTH_UNION, Sphere, Box, 0.5f );
 
 		_addObject( unionObject );
 		_addObject( new Plane( "PlaneGround", Vec3f( 0.0f, -2.0f, 0.0f ), Vec3f( 0.0f, 1.0f, 0.0f ) ) );
@@ -397,7 +368,18 @@ namespace RT_ISICG
 		_attachMaterialToObject( "Grey", "PlaneFront" );
 
 		// Add lights
-		_addLight( new PointLight( Vec3f( -4.0f, 10.0f, 0.0f ), WHITE, 200.0f ) );
+		//_addLight( new PointLight( Vec3f( -4.0f, 10.0f, 0.0f ), WHITE, 200.0f ) );
+		_addLight( new SpotLight( Vec3f( -4.0f, 10.0f, 0.0f ),
+								  Vec3f( -1.0f, 12.0f, -6.0f ),
+								  WHITE,
+								  200.0f,
+								  glm::radians( 52.0f ),
+								  glm::radians( 40.0f ) ) ); // doit être inférieur à l'angle du spot
+	}
+
+	void Scene::_initSceneProjet2()
+	{
+
 	}
 
 	// penser à changer les positions de la caméra dans le main en fonction de la scène choisi
@@ -416,6 +398,7 @@ namespace RT_ISICG
 		//_initSceneTP7DeathStar();
 		//_initSceneTP7Mandelbulb();
 		_initSceneProjet();
+		//_initSceneProjet2();
 	}
 
 	void Scene::loadFileTriangleMesh( const std::string & p_name, const std::string & p_path )
@@ -462,7 +445,7 @@ namespace RT_ISICG
 			// TODO : activer ou desactiver le bvh
 			triMesh->buildBVH();
 			_addObject( triMesh );
-
+			
 			const aiMaterial * const mtl = scene->mMaterials[ mesh->mMaterialIndex ];
 			if ( mtl == nullptr )
 			{

@@ -136,7 +136,7 @@ namespace RT_ISICG
 				p_hitRecord._normal = ( *_triangles )[ hitTri ].getNormalInterpolation( u, v );
 				p_hitRecord.faceNormal( p_ray.getDirection() );
 				p_hitRecord._distance = tClosest;
-
+				p_hitRecord._object	  = reinterpret_cast<BaseObject *>( _triangles->at( hitTri ).getRefMesh() );
 				return true;
 			}
 		}
