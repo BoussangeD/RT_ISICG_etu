@@ -21,6 +21,7 @@ namespace RT_ISICG
 		inline void setNbPixelSamples( const int p_nbPixelSamples ) { _nbPixelSamples = p_nbPixelSamples; }
 
 		float renderImage( const Scene & p_scene, const BaseCamera * p_camera, Texture & p_texture );
+		float renderImage( const Scene & scene, const std::vector<BaseCamera *> & cameras, Texture & texture );
 
 	  private:
 		BaseIntegrator * _integrator	 = nullptr;

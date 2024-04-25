@@ -95,4 +95,58 @@ namespace RT_ISICG
 
 		return chrono.elapsedTime();
 	}
+
+	// version depth of field
+	// Cf. https://pathtracing.home.blog/depth-of-field/ et https://stackoverflow.com/questions/10012219/how-to-implement-depth-of-field-in-ray-tracer
+	float Renderer::renderImage( const Scene &					   p_scene,
+								 const std::vector<BaseCamera *> & p_cameras,
+								 Texture &						   p_texture )
+	{
+		const int width		= p_texture.getWidth();
+		const int height	= p_texture.getHeight();
+
+		Chrono			   chrono;
+		ConsoleProgressBar progressBar;
+
+		progressBar.start( height * (int)p_cameras.size(), 50 );
+		chrono.start();
+
+		std::vector<std::vector<Vec3f>> pixelTab( width, std::vector<Vec3f>( height, VEC3F_ZERO ) );
+
+		#pragma omp parallel for
+		for ( int camIdx = 0; camIdx < p_cameras.size(); ++camIdx )	// on fait le rendu autant de fois qu'on a de cameras
+		{
+			for ( int j = 0; j < height; ++j )
+			{
+				for ( int i = 0; i < width; ++i )
+				{
+					Vec3f finalColor = VEC3F_ZERO;
+					for ( int k = 0; k < _nbPixelSamples; k++ )
+					{
+						// randomFloat du header random.hpp
+						float sx	   = (float)( i + randomFloat() ) / width;
+						float sy	   = (float)( j + randomFloat() ) / height;
+						Ray	  ray	   = p_cameras[camIdx]->generateRay( sx, sy );
+						Vec3f colorRay = _integrator->Li( p_scene, ray, 0.0f, 10000.0f );
+						finalColor += colorRay;
+					}
+					finalColor /= _nbPixelSamples;
+
+					finalColor = glm::clamp( finalColor, 0.0f, 1.0f );	// restreindre l'intervalle [0;255] sur [0;1]
+
+					pixelTab[ i ][ j ] += finalColor;	// ajout de la couleur au tableau de pixels
+
+					// calcule la couleur finale d'un pixel en moyennant les valeurs de couleur stockées dans le tableau
+					Vec3f finalColor2 = pixelTab[ i ][ j ] / (float)p_cameras.size();	
+					p_texture.setPixel( i, j, glm::clamp( finalColor2, 0.f, 1.f ) );
+				}
+				progressBar.next();
+			}
+		}
+
+		chrono.stop();
+		progressBar.stop();
+
+		return chrono.elapsedTime();
+	}
 } // namespace RT_ISICG

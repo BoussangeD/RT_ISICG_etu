@@ -43,6 +43,7 @@ namespace RT_ISICG
 		}
 	}
 
+	// Aller dans le main pour changer de scène
 	void Scene::_initSceneTP1() {
 		// Add objects.
 		_addObject( new Sphere( "Sphere1", Vec3f( 0.f, 0.f, 3.f ), 1.f ) );
@@ -379,26 +380,30 @@ namespace RT_ISICG
 
 	void Scene::_initSceneProjet2()
 	{
+		// Add objects.
+		_addObject( new ImplicitSphere( "ImplicitSphere1", Vec3f( 2.f, 0.f, 0.f ), 1.2f ) );
+		_addObject( new ImplicitSphere( "ImplicitSphere2", Vec3f( -4.f, 0.f, 2.f ), 1.0f ) );
+		_addObject( new ImplicitSphere( "ImplicitSphere3", Vec3f( 0.f, 0.f, 3.f ), 0.5f ) );
+		_addObject( new ImplicitSphere( "ImplicitSphere4", Vec3f( -3.f, 0.f, 10.f ), 1.5f ) );
 
-	}
+		_addObject( new Plane( "Plane1", Vec3f( 0.0f, -2.0f, 0.0f ), Vec3f( 0.0f, 1.0f, 0.0f ) ) );
 
-	// penser à changer les positions de la caméra dans le main en fonction de la scène choisi
-	void Scene::init()
-	{
-		//_initSceneTP1();
-		//_initSceneTP2();
-		//_initSceneTP3();
-		//_initSceneTP4();
-		//_initSceneTP5();
-		//_initSceneTP5Phong();
-		//_initSceneTP5CookTorrance();
-		//_initSceneTP6Mirror();
-		//_initSceneTP6Transparent();
-		//_initSceneTP7Sphere();
-		//_initSceneTP7DeathStar();
-		//_initSceneTP7Mandelbulb();
-		_initSceneProjet();
-		//_initSceneProjet2();
+		// Add materials.
+		_addMaterial( new ColorMaterial( "Blue", BLUE ) );
+		_addMaterial( new ColorMaterial( "Green", GREEN ) );
+		_addMaterial( new ColorMaterial( "Yellow", YELLOW ) );
+		_addMaterial( new ColorMaterial( "White", WHITE ) );
+		_addMaterial( new ColorMaterial( "Red", RED ) );
+
+		// Link objects and materials.
+		_attachMaterialToObject( "Blue", "ImplicitSphere1" );
+		_attachMaterialToObject( "Green", "ImplicitSphere2" );
+		_attachMaterialToObject( "Yellow", "ImplicitSphere3" );
+		_attachMaterialToObject( "White", "ImplicitSphere4" );
+		_attachMaterialToObject( "Red", "Plane1" );
+
+		// Add lights
+		_addLight( new PointLight( Vec3f( 1.0f, 10.0f, 1.0f ), WHITE, 100.0f ) );
 	}
 
 	void Scene::loadFileTriangleMesh( const std::string & p_name, const std::string & p_path )

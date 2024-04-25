@@ -27,22 +27,6 @@ namespace RT_ISICG
 
 		// Initialization from file.
 		void init( const std::string & p_path ) { throw std::exception( "Not implemented !" ); }
-
-		void loadFileTriangleMesh( const std::string & p_name, const std::string & p_path );
-
-		const LightList & getLights() const { return _lightList; }
-
-		// Check for nearest intersection between p_tMin and p_tMax : if found fill p_hitRecord.
-		bool intersect( const Ray & p_ray, const float p_tMin, const float p_tMax, HitRecord & p_hitRecord ) const;
-		bool intersectAny( const Ray & p_ray, const float p_tMin, const float p_tMax ) const;
-
-	  private:
-		void _addObject( BaseObject * p_object );
-		void _addMaterial( BaseMaterial * p_material );
-		void _addLight( BaseLight * p_light );
-
-		void _attachMaterialToObject( const std::string & p_materialName, const std::string & p_objectName );
-
 		void _initSceneTP1();
 		void _initSceneTP2();
 		void _initSceneTP3();
@@ -58,6 +42,21 @@ namespace RT_ISICG
 		void _initSceneTP7Mandelbulb();
 		void _initSceneProjet();
 		void _initSceneProjet2();
+
+		void loadFileTriangleMesh( const std::string & p_name, const std::string & p_path );
+
+		const LightList & getLights() const { return _lightList; }
+
+		// Check for nearest intersection between p_tMin and p_tMax : if found fill p_hitRecord.
+		bool intersect( const Ray & p_ray, const float p_tMin, const float p_tMax, HitRecord & p_hitRecord ) const;
+		bool intersectAny( const Ray & p_ray, const float p_tMin, const float p_tMax ) const;
+
+	  private:
+		void _addObject( BaseObject * p_object );
+		void _addMaterial( BaseMaterial * p_material );
+		void _addLight( BaseLight * p_light );
+
+		void _attachMaterialToObject( const std::string & p_materialName, const std::string & p_objectName );
 
 	  private:
 		ObjectMap	_objectMap;
