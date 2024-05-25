@@ -350,7 +350,7 @@ namespace RT_ISICG
 											  Vec3f( 0.0f, 1.0f, 0.0f ) );
 
 		ImplicitSphere * Sphere = new ImplicitSphere( "ImplicitSphere", Vec3f( -2.9f, 0.5f, 5.f ), 0.8f );
-		CSG *			 unionObject = new CSG( "CSG", CSG::Operation::SMOOTH_UNION, Sphere, Box, 0.5f );
+		CSG *			 unionObject = new CSG( "CSG", CSG::Operation::SMOOTH_SUBTRACTION, Sphere, Box, 0.5f );
 
 		_addObject( unionObject );
 		_addObject( new Plane( "PlaneGround", Vec3f( 0.0f, -2.0f, 0.0f ), Vec3f( 0.0f, 1.0f, 0.0f ) ) );
@@ -370,12 +370,10 @@ namespace RT_ISICG
 
 		// Add lights
 		//_addLight( new PointLight( Vec3f( -4.0f, 10.0f, 0.0f ), WHITE, 200.0f ) );
-		_addLight( new SpotLight( Vec3f( -4.0f, 10.0f, 0.0f ),
-								  Vec3f( -1.0f, 12.0f, -6.0f ),
-								  WHITE,
-								  200.0f,
-								  glm::radians( 52.0f ),
-								  glm::radians( 40.0f ) ) ); // doit être inférieur à l'angle du spot
+
+		const float angle = 0.9f;		  // doit être en 0 et 1
+		const float startFallOff = 0.17f; // doit être inférieur à l'angle du spot
+		_addLight( new SpotLight( Vec3f( -4.0f, 10.0f, 2.5f ), Vec3f( -1.0f, 12.0f, -3.0f ), WHITE, 200.0f, angle, startFallOff ) );
 	}
 
 	void Scene::_initSceneProjet2()
@@ -386,24 +384,92 @@ namespace RT_ISICG
 		_addObject( new ImplicitSphere( "ImplicitSphere3", Vec3f( 0.f, 0.f, 3.f ), 0.5f ) );
 		_addObject( new ImplicitSphere( "ImplicitSphere4", Vec3f( -3.f, 0.f, 10.f ), 1.5f ) );
 
-		_addObject( new Plane( "Plane1", Vec3f( 0.0f, -2.0f, 0.0f ), Vec3f( 0.0f, 1.0f, 0.0f ) ) );
+		_addObject( new Plane( "PlaneGround", Vec3f( 0.0f, -2.0f, 0.0f ), Vec3f( 0.0f, 1.0f, 0.0f ) ) );
 
 		// Add materials.
 		_addMaterial( new ColorMaterial( "Blue", BLUE ) );
 		_addMaterial( new ColorMaterial( "Green", GREEN ) );
 		_addMaterial( new ColorMaterial( "Yellow", YELLOW ) );
 		_addMaterial( new ColorMaterial( "White", WHITE ) );
-		_addMaterial( new ColorMaterial( "Red", RED ) );
+		_addMaterial( new ColorMaterial( "Grey", GREY ) );
 
 		// Link objects and materials.
 		_attachMaterialToObject( "Blue", "ImplicitSphere1" );
 		_attachMaterialToObject( "Green", "ImplicitSphere2" );
 		_attachMaterialToObject( "Yellow", "ImplicitSphere3" );
 		_attachMaterialToObject( "White", "ImplicitSphere4" );
-		_attachMaterialToObject( "Red", "Plane1" );
+		_attachMaterialToObject( "Grey", "PlaneGround" );
 
 		// Add lights
 		_addLight( new PointLight( Vec3f( 1.0f, 10.0f, 1.0f ), WHITE, 100.0f ) );
+	}
+
+	void Scene::_initSceneImageFinale()
+	{
+		// ================================================================
+		// Add materials .
+		// ================================================================
+		_addMaterial( new MatteMaterial( "WhiteMatte", WHITE, 0.6f ) );
+		_addMaterial( new MatteMaterial( "RedMatte", RED, 0.6f ) );
+		_addMaterial( new MatteMaterial( "GreenMatte", GREEN, 0.6f ) );
+		_addMaterial( new MatteMaterial( "BrownMatte", BROWN, 0.6f ) );
+		_addMaterial( new MatteMaterial( "GreyMatte", GREY, 0.6f ) );
+		_addMaterial( new MatteMaterial( "MagentaMatte", MAGENTA, 0.6f ) );
+
+		_addMaterial( new MirrorMaterial( "MirrorMaterial" ) );
+		_addMaterial( new TransparentMaterial( "TransparentMaterial", 1.3f ) );
+
+		// Add materials.
+		Vec3f F0 = Vec3f( 1.f, 0.85f, 0.57f );
+		// 1: nom, 2. diffuse, 3: specular, 4: rugosite, 5: metalness
+		_addMaterial( new MicrofacetMaterial( "GoldenMicroFacet", F0, F0, 0.3f, 0.3f ) );
+
+
+		Vec3f diffuseArgent	 = Vec3f( 0.7f, 0.7f, 0.7f ); 
+		Vec3f specularArgent = Vec3f( 0.8f, 0.8f, 0.8f ); 
+		_addMaterial( new MicrofacetMaterial( "ArgentMicroFacet", diffuseArgent, specularArgent, 0.3f, 0.3f ) );
+
+		// ================================================================
+		// Add objects .
+		// ================================================================
+
+		ImplicitBox * Box = new ImplicitBox( "ImplicitBox",
+											 Vec3f( 5.0f, 0.0f, 2.0f ),
+											 Vec3f( 0.5f, 3.0f, 2.0f ),
+											 glm::radians( 0.0f ),
+											 Vec3f( 0.0f, 0.0f, 0.0f ) );
+
+		ImplicitSphere * Sphere		 = new ImplicitSphere( "ImplicitSphere", Vec3f( 5.0f, 0.5f, 2.f ), 1.5f );
+		CSG *			 unionObject = new CSG( "CSG", CSG::Operation::SMOOTH_SUBTRACTION, Sphere, Box, 0.5f );
+
+		_addObject( unionObject );
+		_attachMaterialToObject( "GoldenMicroFacet", "CSG" );
+
+		_addObject( new ImplicitDeathStar( "ImplicitDS", Vec3f( -5.0f, 0.7f, 2.0f ), 2.0f, 2.0f, 3.1f ) );
+		_attachMaterialToObject( "ArgentMicroFacet", "ImplicitDS" );
+
+
+		// Pseudo Cornell box made with infinite planes .
+		_addObject( new Plane( "PlaneGround", Vec3f( 0.f, -3.f, 0.f ), Vec3f( 0.f, 1.f, 0.f ) ) );
+		_attachMaterialToObject( "BrownMatte", "PlaneGround" );
+		_addObject( new Plane( "PlaneLeft", Vec3f( 10.f, 0.f, 0.f ), Vec3f( -1.f, 0.f, 0.f ) ) );
+		_attachMaterialToObject( "BrownMatte", "PlaneLeft" );
+		_addObject( new Plane( "PlaneCeiling", Vec3f( 0.f, 10.f, 0.f ), Vec3f( 0.f, -1.f, 0.f ) ) );
+		_attachMaterialToObject( "BrownMatte", "PlaneCeiling" );
+		_addObject( new Plane( "PlaneRight", Vec3f( -10.f, 0.f, 0.f ), Vec3f( 1.f, 0.f, 0.f ) ) );
+		_attachMaterialToObject( "BrownMatte", "PlaneRight" );
+
+		_addObject( new Plane( "PlaneFront", Vec3f( 0.f, 0.f, 10.f ), Vec3f( 0.f, 0.f, -1.f ) ) );
+		_attachMaterialToObject( "MirrorMaterial", "PlaneFront" );
+		_addObject( new Plane( "PlaneBack", Vec3f( 0.f, 0.f, -10.f ), Vec3f( 0.f, 0.f, 1.f ) ) );
+		_attachMaterialToObject( "MirrorMaterial", "PlaneBack" );
+		// ================================================================
+		// Add lights .
+		// ================================================================
+		//_addLight( new PointLight( Vec3f( 0.f, 5.f, 0.f ), WHITE, 100.f ) );
+		_addLight ( new QuadLight (  Vec3f( 0.f, 9.f, 0.f ),
+		 Vec3f ( -2.f, 0.f, 0.f ) ,
+		 Vec3f ( 0.f, 1.f, 2.f ) , WHITE , 40.f ) );
 	}
 
 	void Scene::loadFileTriangleMesh( const std::string & p_name, const std::string & p_path )

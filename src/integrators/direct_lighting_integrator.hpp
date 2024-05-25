@@ -22,7 +22,6 @@ namespace RT_ISICG
 							   const BaseLight * p_light,
 							   const Scene &	 p_scene,
 							   const float		 p_tMin ) const; // méthode pour le calcul de l'éclairage direct
-		int	  _nbLightSamples = 32;
 	};
 
 } // namespace RT_ISICG

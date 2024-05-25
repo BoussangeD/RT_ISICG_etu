@@ -19,6 +19,8 @@ namespace RT_ISICG
 		void setBackgroundColor( const Vec3f & p_color );
 
 		inline void setNbPixelSamples( const int p_nbPixelSamples ) { _nbPixelSamples = p_nbPixelSamples; }
+		void		setNbLightSamples( int p_NblightSamples ) { _integrator->setNbLightSamples( p_NblightSamples ); }
+		void		setNbBounces( int p_NbBounces ) { _integrator->setNbBounces( p_NbBounces ); }
 
 		float renderImage( const Scene & p_scene, const BaseCamera * p_camera, Texture & p_texture );
 		float renderImage( const Scene & scene, const std::vector<BaseCamera *> & cameras, Texture & texture );

@@ -20,19 +20,23 @@ namespace RT_ISICG
 		TP7DeathStar,
 		TP7Mandelbulb,
 		Projet1,
-		Projet2
+		Projet2,
+		ImageFinale
 	};
 
 	int main( int argc, char ** argv )
 	{
 		// Changer ici pour choisir le TP voulu, la taille de l'image ou le nombre de samples
-		TP		  choixTP	= TP::Projet2;
+		TP		  choixTP	= TP::ImageFinale;
 		const int imgWidth	= 600;
 		const int imgHeight = 400;
-		const int nbSamples = 32;
 
-		const int   nbCameras = 30;		// nombre de caméras pour l'effet de profondeur de champ
-		const float	aperture  = 0.1f;
+		int nbSamples      = 32;	// nb pixels
+		int nbLightSamples = 32;	// nb lights
+		int nbBounces	   = 5;	    // nb bounces
+
+		int     nbCameras = 20;		// nombre de caméras pour l'effet de profondeur de champ
+		float	aperture  = 0.1f;
 
 		// Create a texture to render the scene.
 		Texture img = Texture( imgWidth, imgHeight );
@@ -87,12 +91,16 @@ namespace RT_ISICG
 		Vec3f _lookAt_7mb	= Vec3f( 0.0f, 0.0f, 79.0f );
 
 		// position CSG
-		Vec3f _position_csg = Vec3f( -3.0f, 5.0f, -10.0f );
+		Vec3f _position_csg = Vec3f( -3.0f, 5.0f, -6.0f );
 		Vec3f _lookAt_csg	= Vec3f( 0.0f, -30.0f, 79.0f );
 
 		// position DoF
 		Vec3f _position_dof = Vec3f( 0.0f, 0.0f, -6.0f );
 		Vec3f _lookAt_dof	= Vec3f( 0.0f, 0.0f, 0.0f );
+
+		// position Image Finale
+		Vec3f _position_imgF = Vec3f( 0.0f, 2.0f, -10.0f );
+		Vec3f _lookAt_imgF	= Vec3f( 0.0f, 0.0f, 5.0f );
 
 		// Create and init scene.
 		Scene scene;
@@ -210,6 +218,15 @@ namespace RT_ISICG
 			_choixIntegrator = IntegratorType::WHITTED;
 			depthOfField	 = true;
 			break;
+
+		case TP::ImageFinale:
+			scene._initSceneImageFinale();
+			nbBounces		 = 50;
+			_choixPosition	 = _position_imgF;
+			_choixLookAt	 = _lookAt_imgF;
+			_choixIntegrator = IntegratorType::WHITTED;
+			depthOfField	 = false;
+			break;
 		}
 
 		// Create and setup the renderer.
@@ -217,6 +234,8 @@ namespace RT_ISICG
 		renderer.setIntegrator( _choixIntegrator );
 		renderer.setBackgroundColor( GREY );
 		renderer.setNbPixelSamples( nbSamples );
+		renderer.setNbLightSamples( nbLightSamples );
+		renderer.setNbBounces( nbBounces );
 
 		// Launch rendering.
 		std::cout << "Rendering..." << std::endl;
@@ -236,7 +255,7 @@ namespace RT_ISICG
 		{
 			std::vector<BaseCamera *> cameras;
 			// Launch rendering with each camera
-			for ( int i = 0; i < nbCameras; ++i )
+			for ( int i = 0; i < nbCameras; i++ )
 			{
 				// position aléatoire pour la caméra via l'aperture
 				Vec3f randomPosition = Vec3f( randomFloat() * aperture + _choixPosition.x,

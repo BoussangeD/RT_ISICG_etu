@@ -114,11 +114,11 @@ namespace RT_ISICG
 		std::vector<std::vector<Vec3f>> pixelTab( width, std::vector<Vec3f>( height, VEC3F_ZERO ) );
 
 		#pragma omp parallel for
-		for ( int camIdx = 0; camIdx < p_cameras.size(); ++camIdx )	// on fait le rendu autant de fois qu'on a de cameras
+		for ( int camIdx = 0; camIdx < p_cameras.size(); camIdx++ )	// on fait le rendu autant de fois qu'on a de cameras
 		{
-			for ( int j = 0; j < height; ++j )
+			for ( int j = 0; j < height; j++ )
 			{
-				for ( int i = 0; i < width; ++i )
+				for ( int i = 0; i < width; i++ )
 				{
 					Vec3f finalColor = VEC3F_ZERO;
 					for ( int k = 0; k < _nbPixelSamples; k++ )

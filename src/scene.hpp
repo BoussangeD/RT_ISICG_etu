@@ -42,6 +42,7 @@ namespace RT_ISICG
 		void _initSceneTP7Mandelbulb();
 		void _initSceneProjet();
 		void _initSceneProjet2();
+		void _initSceneImageFinale();
 
 		void loadFileTriangleMesh( const std::string & p_name, const std::string & p_path );
 

@@ -31,9 +31,6 @@ namespace RT_ISICG
 					 const float   p_tMax,
 					 int		   p_nbBounces,
 					 bool		   p_inObject ) const;
-
-		int _nbBounces = 5;
-		int _nbLightSamples = 32;
 	};
 
 } // namespace RT_ISICG
